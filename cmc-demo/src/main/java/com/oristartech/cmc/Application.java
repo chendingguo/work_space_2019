@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * @author chenle
  *
  */
-@SpringBootApplication(scanBasePackages = "com.oristartech.cmc",exclude={DataSourceAutoConfiguration.class})
+@SpringBootApplication(scanBasePackages = "com.oristartech.cmc.demo",exclude={DataSourceAutoConfiguration.class})
 public class Application {
 
     public static void main(String[] args) {
