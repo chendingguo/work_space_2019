@@ -48,13 +48,27 @@ public class RpcTestController {
 
     }
 
+    @GetMapping("/")
+    public ResultModel getUserResourcesByFunType(String token, String funType,HttpServletRequest request) {
+        String userUid = userAuthService.getUserUidByToken(token);
+        return ResultModel.OK(userAuthService.getUserResourcesByFunType(userUid,funType));
+    }
+
+    @GetMapping("/getUserBriefInfo")
+    public ResultModel getUserBriefInfo(String token, HttpServletRequest request) {
+        String userUid = userAuthService.getUserUidByToken(token);
+        return ResultModel.OK(userAuthService.getUserBriefInfo(userUid));
+
+    }
+
+
     /**
      * 资源请求方法
      *
      * @param request
      * @return
      */
-    @Permission(code = "system_userManage", name = "system_userManage")
+
     @GetMapping(value = "/getBusinessInfo")
     public ResultModel getBusinessInfo(HttpServletRequest request) {
 

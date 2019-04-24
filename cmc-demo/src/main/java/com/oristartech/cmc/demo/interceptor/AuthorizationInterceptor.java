@@ -2,7 +2,7 @@ package com.oristartech.cmc.demo.interceptor;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.oristartech.cmc.base.open.service.UserAuthService;
-import com.oristartech.cmc.base.util.PermissionUtil;
+import com.oristartech.cmc.base.util.ResourceInterceptUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -23,7 +23,8 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
                              Object handler) {
 
         try {
-            return PermissionUtil.handlerPermission(request, response, handler, userAuthService);
+            System.out.println(request.getRequestURI());
+            return ResourceInterceptUtil.handlePermission(request, response, handler, userAuthService);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
