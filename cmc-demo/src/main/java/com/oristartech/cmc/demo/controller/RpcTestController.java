@@ -48,7 +48,7 @@ public class RpcTestController {
 
     }
 
-    @GetMapping("/")
+    @GetMapping("/getUserResourcesByFunType")
     public ResultModel getUserResourcesByFunType(String token, String funType,HttpServletRequest request) {
         String userUid = userAuthService.getUserUidByToken(token);
         return ResultModel.OK(userAuthService.getUserResourcesByFunType(userUid,funType));
