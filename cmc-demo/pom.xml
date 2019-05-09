@@ -24,9 +24,21 @@
         </dependency>
 
         <dependency>
-        <groupId>com.oristartech.cmc</groupId>
-        <artifactId>cmc-base</artifactId>
-        <version>1.0.0</version>
+            <groupId>com.oristartech.cmc</groupId>
+            <artifactId>cmc-base</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.oristartech.cmc</groupId>
+            <artifactId>cmc-product-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.oristartech.cmc</groupId>
+            <artifactId>cmc-uat-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -70,42 +82,5 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>maven-snapshots</id>
-            <url>http://nexus.tech.nanhaicorp.com/repository/maven-snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>maven-releases</id>
-            <url>http://nexus.tech.nanhaicorp.com/repository/maven-releases/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-
-    <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://nexus.tech.nanhaicorp.com/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>http://nexus.tech.nanhaicorp.com/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
