@@ -1,5 +1,6 @@
 package com.oristartech.cmc.demo.controller;
 
+import ch.qos.logback.classic.pattern.ClassNameOnlyAbbreviator;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.oristartech.cmc.base.config.annotation.Permission;
 import com.oristartech.cmc.base.domain.ResultModel;
@@ -7,6 +8,7 @@ import com.oristartech.cmc.base.open.service.UserAuthService;
 //import com.oristartech.cmc.cinema.api.DictService;
 import com.oristartech.cmc.base.open.service.UserCommonService;
 import com.oristartech.cmc.base.open.service.UserOrgService;
+import com.oristartech.cmc.uat.api.RoleService;
 import com.oristartech.cmc.uat.api.UserLoginService;
 import com.oristartech.cmc.uat.api.UserService;
 import com.sun.org.apache.regexp.internal.RE;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,9 @@ public class RpcTestController {
     @Reference
     UserService userService;
 
+    @Reference
+    RoleService roleService;
+
 //    @GetMapping("/getDictInfo")
 //    public ResultModel getDictInfo(String code) {
 //        return dictService.getDictInfo(code);
@@ -48,11 +54,12 @@ public class RpcTestController {
 
 
     @GetMapping("/testUri/{username}")
-    public ResultModel testUri(@PathVariable String username){
+    public ResultModel testUri(@PathVariable String username) {
 
         return ResultModel.OK(username);
 
     }
+
     @GetMapping("/getUserOrgCinemaTree")
     public ResultModel getUserOrgCinemaTree(String userUid, HttpServletRequest request) {
         return ResultModel.OK(userOrgService.getUserOrgCinemaTree(userUid));
@@ -80,9 +87,9 @@ public class RpcTestController {
     }
 
     @GetMapping("/getUserResourcesByFunType")
-    public ResultModel getUserResourcesByFunType(String token, String funType,HttpServletRequest request) {
+    public ResultModel getUserResourcesByFunType(String token, String funType, HttpServletRequest request) {
         String userUid = userAuthService.getUserUidByToken(token);
-        return ResultModel.OK(userAuthService.getUserResourcesByFunType(userUid,funType));
+        return ResultModel.OK(userAuthService.getUserResourcesByFunType(userUid, funType));
     }
 
     @GetMapping("/getUserBriefInfo")
@@ -108,33 +115,48 @@ public class RpcTestController {
 
 
     @GetMapping(value = "/getConsumerUser")
-    public ResultModel getConsumerUser(Long consumerId,HttpServletRequest request) {
+    public ResultModel getConsumerUser(Long consumerId, HttpServletRequest request) {
 
         return ResultModel.OK(userCommonService.getUserByConsumerId(consumerId));
     }
 
     @GetMapping(value = "/getUserByOrgUid")
-    public ResultModel getUserByOrgUid(Long consumerId,String orgUid,HttpServletRequest request) {
-       List<String> roleList=new ArrayList<>();
+    public ResultModel getUserByOrgUid(Long consumerId, String orgUid, HttpServletRequest request) {
+        List<String> roleList = new ArrayList<>();
         roleList.add("a934f0db0145492491fd6f474e0fc2d8");
-        return ResultModel.OK(userCommonService.getUserByPage(1,10,consumerId,632517,"",""));
+        return ResultModel.OK(userCommonService.getUserByPage(1, 10, consumerId, 632517, "", ""));
     }
 
 
     @GetMapping(value = "/logout")
-    public ResultModel logout(String token){
-       return userService.logout(token);
-    }
-    @GetMapping(value="modifyUserPassword")
-    public ResultModel modifyUserPassword(String loginName,String password,String newPassword,Long customerId){
-        return userService.modifyPosUserPassword(loginName,password,newPassword,customerId);
-
+    public ResultModel logout(String token) {
+        return userService.logout(token);
     }
 
+    @GetMapping(value = "/modifyUserPassword")
+    public ResultModel modifyUserPassword(String loginName, String password, String newPassword, Long customerId) {
+        return userService.modifyPosUserPassword(loginName, password, newPassword, customerId);
 
-    @GetMapping(value = "/posLogin")
-    public ResultModel logout(Long consumerId, Long cinemaId, String loginName, String password){
-        return  ResultModel.OK(userService.posLogin(consumerId,cinemaId,loginName,password));
+    }
+
+
+    @GetMapping(value = "/getRoleByConsumerId")
+    public ResultModel getRoleByConsumerId(Long consumerId) {
+        return ResultModel.OK(roleService.getRoleByConsumerId(consumerId));
+
+    }
+
+
+    @GetMapping("/getOrgTreeByConsumerId")
+    public ResultModel getOrgTreeByConsumerId(long consumerId, HttpServletRequest request) {
+        return ResultModel.OK(userOrgService.getOrgTreeByConsumerId(consumerId));
+
+    }
+
+    @GetMapping(value = "/getUserByPage")
+    public ResultModel getUserByPage(Long consumerId,long cinemaId, HttpServletRequest request) {
+
+        return ResultModel.OK(userCommonService.getUserByPage(1, 10, consumerId, cinemaId, "", ""));
     }
 
 

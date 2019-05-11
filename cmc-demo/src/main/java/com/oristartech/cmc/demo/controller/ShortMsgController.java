@@ -4,23 +4,23 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.oristartech.cmc.base.domain.ResultModel;
 import com.oristartech.cmc.product.facade.api.ShortMsgService;
 import com.oristartech.cmc.product.facade.model.MsgRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-@RestController("/msg/")
-
+@RestController
+@RequestMapping("/demo")
 public class ShortMsgController {
 
     @Reference
     ShortMsgService shortMsgService;
 
 
-    @PostMapping
+    @PostMapping("/sendSingleMsg")
     public ResultModel sendSingleMsg(@RequestBody MsgRequest msgRequest, HttpServletRequest request){
         msgRequest.setTemplateCode("buy_card_template");
         msgRequest.setSender("test");
@@ -31,6 +31,25 @@ public class ShortMsgController {
         msgRequest.setParamMap(paramMap);
 
         return shortMsgService.sendSingleMsg(msgRequest);
+
+    }
+
+
+    @GetMapping("/sendSameContentBatchMsg")
+    public ResultModel sendSameContentBatchMsg( HttpServletRequest request){
+        MsgRequest msgRequest=new MsgRequest();
+        List<String> mobiles=new ArrayList<>();
+        mobiles.add("15313953922");
+        mobiles.add("13110430179");
+        msgRequest.setTemplateCode("buy_card_template");
+        msgRequest.setSender("batch");
+        msgRequest.setMobile("");
+        Map<String, String> paramMap =new HashMap<>();
+        paramMap.put("CardCode","ali-send-batch");
+        paramMap.put("Money","123");
+        msgRequest.setParamMap(paramMap);
+
+        return shortMsgService.sendSameContentBatchMsg(mobiles,msgRequest);
 
     }
 }
