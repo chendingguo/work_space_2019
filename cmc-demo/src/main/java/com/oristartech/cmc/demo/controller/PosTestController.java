@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/demo")
-public class PostTestController {
+public class PosTestController {
 
 //    @Reference(version = "1.0")
 //    DictService dictService;

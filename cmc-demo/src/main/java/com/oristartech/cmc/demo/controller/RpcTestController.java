@@ -1,35 +1,32 @@
 package com.oristartech.cmc.demo.controller;
 
-import ch.qos.logback.classic.pattern.ClassNameOnlyAbbreviator;
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.oristartech.cmc.base.config.annotation.Permission;
 import com.oristartech.cmc.base.domain.ResultModel;
 import com.oristartech.cmc.base.open.service.UserAuthService;
-//import com.oristartech.cmc.cinema.api.DictService;
 import com.oristartech.cmc.base.open.service.UserCommonService;
 import com.oristartech.cmc.base.open.service.UserOrgService;
+import com.oristartech.cmc.cinema.api.DictService;
 import com.oristartech.cmc.uat.api.RoleService;
-import com.oristartech.cmc.uat.api.UserLoginService;
 import com.oristartech.cmc.uat.api.UserService;
-import com.sun.org.apache.regexp.internal.RE;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
 
-import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+
+//import com.oristartech.cmc.cinema.api.DictService;
 
 
 @RestController
 @RequestMapping("/demo")
 public class RpcTestController {
 
-//    @Reference(version = "1.0")
-//    DictService dictService;
+    @Reference(version = "1.0")
+    DictService dictService;
 
     @Reference(version = "1.0")
     UserAuthService userAuthService;
@@ -46,11 +43,11 @@ public class RpcTestController {
     @Reference
     RoleService roleService;
 
-//    @GetMapping("/getDictInfo")
-//    public ResultModel getDictInfo(String code) {
-//        return dictService.getDictInfo(code);
-//
-//    }
+    @GetMapping("/getDictInfo")
+    public ResultModel getDictInfo(String code) {
+        return dictService.getDictInfo(code);
+
+    }
 
 
     @GetMapping("/testUri/{username}")
@@ -95,7 +92,11 @@ public class RpcTestController {
     @GetMapping("/getUserBriefInfo")
     public ResultModel getUserBriefInfo(String token, HttpServletRequest request) {
         String userUid = userAuthService.getUserUidByToken(token);
-        return ResultModel.OK(userAuthService.getUserBriefInfo(userUid));
+        if (StringUtils.isEmpty(userUid)) {
+            return ResultModel.FAIL("token失效，未获取到用户信息");
+        } else {
+            return ResultModel.OK(userAuthService.getUserBriefInfo(userUid));
+        }
 
     }
 
@@ -154,9 +155,21 @@ public class RpcTestController {
     }
 
     @GetMapping(value = "/getUserByPage")
-    public ResultModel getUserByPage(Long consumerId,long cinemaId, HttpServletRequest request) {
+    public ResultModel getUserByPage(Long consumerId, long cinemaId, HttpServletRequest request) {
 
         return ResultModel.OK(userCommonService.getUserByPage(1, 10, consumerId, cinemaId, "", ""));
+    }
+
+
+    @GetMapping(value = "/getOrgTreeAndCinemaByUser")
+    public ResultModel getOrgTreeAndCinemaByUser(String userUid, HttpServletRequest request) {
+        return ResultModel.OK(userOrgService.getOrgTreeAndCinemaByUser(userUid));
+    }
+
+    @GetMapping("/getUserByConsumerId")
+    public ResultModel getUserByConsumerId(long consumerId, HttpServletRequest request) {
+        return ResultModel.OK(userCommonService.getUserByConsumerId(consumerId));
+
     }
 
 

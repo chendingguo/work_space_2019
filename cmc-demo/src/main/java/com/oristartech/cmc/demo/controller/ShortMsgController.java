@@ -42,11 +42,11 @@ public class ShortMsgController {
         mobiles.add("15313953922");
         mobiles.add("13110430179");
         msgRequest.setTemplateCode("buy_card_template");
-        msgRequest.setSender("batch");
+        msgRequest.setSender("test");
         msgRequest.setMobile("");
         Map<String, String> paramMap =new HashMap<>();
-        paramMap.put("CardCode","ali-send-batch");
-        paramMap.put("Money","123");
+        paramMap.put("CardCode","20190519");
+        paramMap.put("Money","519");
         msgRequest.setParamMap(paramMap);
 
         return shortMsgService.sendSameContentBatchMsg(mobiles,msgRequest);
