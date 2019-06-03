@@ -5,6 +5,7 @@ import com.oristartech.cmc.base.domain.ResultModel;
 import com.oristartech.cmc.base.open.service.UserAuthService;
 import com.oristartech.cmc.base.open.service.UserCommonService;
 import com.oristartech.cmc.base.open.service.UserOrgService;
+import com.oristartech.cmc.uat.api.UserLoginService;
 import com.oristartech.cmc.uat.api.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,10 @@ public class PosTestController {
     UserAuthService userAuthService;
 
     @Reference(version = "1.0")
+    UserLoginService userLoginService;
+
+
+    @Reference(version = "1.0")
     UserOrgService userOrgService;
 
     @Reference
@@ -42,13 +47,19 @@ public class PosTestController {
 
     @GetMapping(value = "/posLogin")
     public ResultModel logout(Long consumerId, Long cinemaId, String loginName, String password){
-        return  ResultModel.OK(userService.posLogin(consumerId,cinemaId,loginName,password));
+        return  userLoginService.posLogin(consumerId,cinemaId,loginName,password);
     }
 
     @GetMapping(value = "/checkPosUserAuth")
     public ResultModel checkPosUserAuth(Long consumerId, Long cinemaId, String loginName, String password){
         return userService.checkPosUserAuth(consumerId,cinemaId,loginName,password);
     }
+
+    @GetMapping(value = "/getPosAuthMenuTree")
+    public ResultModel getPosAuthMenuTree(String userUid,long cinemaId){
+        return userService.getPosAuthMenuTree(userUid,cinemaId);
+    }
+
 
 
 }

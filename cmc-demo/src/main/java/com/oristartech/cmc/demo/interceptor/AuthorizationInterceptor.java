@@ -1,5 +1,6 @@
 package com.oristartech.cmc.demo.interceptor;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.oristartech.cmc.base.domain.ResultModel;
@@ -26,8 +27,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) {
-
-//        try {
+        //try {
 //            response.setCharacterEncoding("utf-8");
 //            response.setContentType("application/json;charset=UTF-8");
 //            HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -37,8 +37,11 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 //
 //            //从header中拿 token
 //            String token = request.getHeader(ResourceInterceptUtil.CPM_USER_TOKEN);
+//            long start= System.currentTimeMillis();
 //            ResultModel resultModel=ResourceInterceptUtil.handlePermission(userAuthService, token,uri, methodName);
-//            if(resultModel.isResult()){
+//            long end= System.currentTimeMillis();
+//            System.out.println("used time:"+(end-start)/1000);
+//             if(resultModel.isResult()){
 //                return true;
 //            }else{
 //                PrintWriter out = response.getWriter();
