@@ -3,17 +3,17 @@ package com.oristartech.cmc.demo.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.oristartech.cmc.base.config.annotation.Permission;
 import com.oristartech.cmc.base.domain.ResultModel;
+import com.oristartech.cmc.base.domain.UserModel;
 import com.oristartech.cmc.base.open.service.UserAuthService;
 import com.oristartech.cmc.base.open.service.UserCommonService;
 import com.oristartech.cmc.base.open.service.UserOrgService;
 import com.oristartech.cmc.cinema.api.DictService;
+import com.oristartech.cmc.product.facade.api.MyJobFacade;
+import com.oristartech.cmc.product.facade.domain.MyJob;
 import com.oristartech.cmc.uat.api.RoleService;
+import com.oristartech.cmc.uat.api.UserLoginService;
 import com.oristartech.cmc.uat.api.UserService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -43,6 +43,12 @@ public class RpcTestController {
 
     @Reference
     RoleService roleService;
+
+    @Reference
+    UserLoginService userLoginService;
+
+
+
 
     @GetMapping("/getDictInfo")
     public ResultModel getDictInfo(String code) {
@@ -84,20 +90,15 @@ public class RpcTestController {
     }
 
     @GetMapping("/getUserResourcesByFunType")
-    public ResultModel getUserResourcesByFunType(String token, String funType, HttpServletRequest request) {
-        String userUid = userAuthService.getUserUidByToken(token);
+    public ResultModel getUserResourcesByFunType(String userUid, String funType, HttpServletRequest request) {
+
         return ResultModel.OK(userAuthService.getUserResourcesByFunType(userUid, funType));
     }
 
     @GetMapping("/getUserBriefInfo")
-    public ResultModel getUserBriefInfo(String token, HttpServletRequest request) {
-        String userUid = userAuthService.getUserUidByToken(token);
-        if (StringUtils.isEmpty(userUid)) {
-            return ResultModel.FAIL("token失效，未获取到用户信息");
-        } else {
-            return ResultModel.OK(userAuthService.getUserBriefInfo(userUid));
-        }
+    public ResultModel getUserBriefInfo(String userUid, HttpServletRequest request) {
 
+            return ResultModel.OK(userAuthService.getUserBriefInfo(userUid));
     }
 
 
@@ -204,6 +205,36 @@ public class RpcTestController {
         return ResultModel.OK(userService.getUserRolesByUserUid(userUid));
 
     }
+
+    @GetMapping("/getUsers")
+    public ResultModel getUsers(HttpServletRequest request) {
+        UserModel userModel=new UserModel();
+        userModel.setConsumerId(805852L);
+        userModel.setUserType((byte)9);
+        return ResultModel.OK(userCommonService.getUsers(userModel));
+
+    }
+
+    @GetMapping("/getCinemaBrandsByConsumerId")
+    public ResultModel getCinemaBrandsByConsumerId(long consumerId,HttpServletRequest request) {
+
+        return ResultModel.OK(userOrgService.getCinemaBrandsByConsumerId(consumerId));
+
+    }
+    @GetMapping("/sendSmsVerifyCode")
+    public ResultModel sendSmsVerifyCode(String mobile,HttpServletRequest request) {
+
+        return userLoginService.sendSmsVerifyCode("oristar",mobile,"");
+
+    }
+
+    @PostMapping("/loginByMobileVerifyCode")
+    public ResultModel loginByMobileVerifyCode(String mobile,String verifyCode,HttpServletRequest request) {
+
+        return userLoginService.loginByMobileVerifyCode("oristar",mobile,verifyCode);
+
+    }
+
 
 
 }

@@ -23,6 +23,8 @@ import java.util.List;
 @RequestMapping("/demo")
 public class PosTestController {
 
+
+
 //    @Reference(version = "1.0")
 //    DictService dictService;
 
@@ -46,7 +48,7 @@ public class PosTestController {
 
 
     @GetMapping(value = "/posLogin")
-    public ResultModel logout(Long consumerId, Long cinemaId, String loginName, String password){
+    public ResultModel posLogin(Long consumerId, Long cinemaId, String loginName, String password){
         return  userLoginService.posLogin(consumerId,cinemaId,loginName,password);
     }
 
@@ -58,6 +60,11 @@ public class PosTestController {
     @GetMapping(value = "/getPosAuthMenuTree")
     public ResultModel getPosAuthMenuTree(String userUid,long cinemaId){
         return userService.getPosAuthMenuTree(userUid,cinemaId);
+    }
+
+    @GetMapping(value = "/checkPosLoginStatus")
+    public ResultModel checkPosLoginStatus(Long consumerId, Long cinemaId, String loginName, String password){
+        return userLoginService.checkPosLoginStatus(consumerId,cinemaId,loginName,password);
     }
 
 
