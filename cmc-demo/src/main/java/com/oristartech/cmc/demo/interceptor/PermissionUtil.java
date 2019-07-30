@@ -43,14 +43,14 @@ public class PermissionUtil {
                 int code = ErrorTypeEnum.USER_NOT_LOGIN.getCode();
                 String msg = ErrorTypeEnum.USER_NOT_LOGIN.getMsg();
                 ResultModel resultModel = new ResultModel(false, code, msg);
-                //TODO: 未登验证
-//                PrintWriter out = response.getWriter();
-//                out.print(JSON.toJSONString(resultModel));
-//                out.flush();
-//                out.close();
 
-                // return false;
-                return true;
+                PrintWriter out = response.getWriter();
+                out.print(JSON.toJSONString(resultModel));
+                out.flush();
+                out.close();
+
+                 return false;
+
             }
 
 

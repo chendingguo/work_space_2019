@@ -1,6 +1,7 @@
 package com.oristartech.cmc.demo.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.oristartech.cmc.OpLog;
 import com.oristartech.cmc.base.config.annotation.Permission;
 import com.oristartech.cmc.base.domain.ResultModel;
 import com.oristartech.cmc.base.domain.UserModel;
@@ -13,6 +14,7 @@ import com.oristartech.cmc.product.facade.domain.MyJob;
 import com.oristartech.cmc.uat.api.RoleService;
 import com.oristartech.cmc.uat.api.UserLoginService;
 import com.oristartech.cmc.uat.api.UserService;
+import com.oristartech.cmc.uat.dto.sys.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -89,7 +91,8 @@ public class RpcTestController {
 
     }
 
-    @GetMapping("/getUserResourcesByFunType")
+    @OpLog(opName="testName",opDesc="testDesc")
+    @PostMapping("/getUserResourcesByFunType")
     public ResultModel getUserResourcesByFunType(String userUid, String funType, HttpServletRequest request) {
 
         return ResultModel.OK(userAuthService.getUserResourcesByFunType(userUid, funType));
@@ -222,9 +225,9 @@ public class RpcTestController {
 
     }
     @GetMapping("/sendSmsVerifyCode")
-    public ResultModel sendSmsVerifyCode(String mobile,HttpServletRequest request) {
+    public ResultModel sendSmsVerifyCode(String consumerCode,String mobile,HttpServletRequest request) {
 
-        return userLoginService.sendSmsVerifyCode("oristar",mobile,"");
+        return userLoginService.sendSmsVerifyCode(consumerCode,mobile,"");
 
     }
 
@@ -233,6 +236,27 @@ public class RpcTestController {
 
         return userLoginService.loginByMobileVerifyCode("oristar",mobile,verifyCode);
 
+    }
+
+    @GetMapping("/queryDictPropertyList")
+    public ResultModel queryDictPropertyList(String dictCode,String propertyCode, String propertyName, int status) {
+
+        return  ResultModel.OK(dictService.queryDictPropertyList(dictCode,propertyCode,propertyName,status));
+
+    }
+
+
+    @GetMapping("/testPathVariable/{s}")
+    public ResultModel testPathVariable(@PathVariable("s") String s) {
+        return  ResultModel.OK(s);
+    }
+
+
+    @OpLog(opName="testName",opDesc="testDesc")
+    @PostMapping("/saveLog")
+    public ResultModel saveLog(@RequestBody User user) {
+
+        return ResultModel.OK(user);
     }
 
 
